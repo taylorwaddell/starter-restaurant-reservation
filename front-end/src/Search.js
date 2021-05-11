@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import ReservationCard from "./ReservationCard";
+
 function Search() {
+  const [reservations, setReservations] = useState();
   const [searchNumber, setSearchNumber] = useState();
   const history = useHistory();
 
@@ -27,6 +30,13 @@ function Search() {
       <button type="submit" onClick={handleSubmit}>
         Find
       </button>
+      {reservations.length ? (
+        reservations.map((reservation, reservation_id) => (
+          <ReservationCard reservation={reservation} key={reservation_id} />
+        ))
+      ) : (
+        <h5 className="text-white mt-3">No reservations found</h5>
+      )}
     </main>
   );
 }
