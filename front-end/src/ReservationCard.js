@@ -1,16 +1,16 @@
 import React from 'react';
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function ReservationCard({ reservation }) {
-    const history = useHistory();
+    // const history = useHistory();
 
     const {
 		reservation_id,
-		first_name,
-		last_name,
-		people,
-		reservation_time,
-		mobile_number,
+		// first_name,
+		// last_name,
+		// people,
+		// reservation_time,
+		// mobile_number,
 		status,
 	} = reservation;
 

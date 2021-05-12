@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import formatReservationDate from "./utils/format-reservation-date";
+import ErrorAlert from "./layout/ErrorAlert";
 
 function NewReservation() {
   const history = useHistory();
@@ -12,18 +12,51 @@ function NewReservation() {
     reservation_time: "",
     party_size: 0,
   });
-  function handleChange({ target }) {
-    setFormData({ ...formData, [target.name]: [target.value] });
+  const [errors, setErrors] = useState([]);
+  const displayErrors = () => {
+    return errors.map((error, idx) => <ErrorAlert key={idx} error={error} />);
   }
+
+
+  function handleChange({ target }) {
+    setFormData({ ...formData, [target.name]: target.value });
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     // insert API submit sauce here
-    history.push(
-      `/dashboard?date=${formatReservationDate(formData.reservation_date)}`
-    );
+    if (valiDate()) {
+      history.push(
+        `/dashboard?date=${formData.reservation_date}`
+      );
+    }
   }
+  function valiDate() {
+    const reserveDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00.000`);
+    const todaysDate = new Date();
+    const foundErrors = [];
+    
+    console.log(reserveDate.getDay());
+    if (reserveDate.getDay() === 1) {
+      foundErrors.push({
+        message:
+          "Reservations cannot be made on a Tuesday (Restaurant is closed).",
+      });
+    }
+
+    if (reserveDate < todaysDate) {
+      foundErrors.push({ message: "Reservation time cannot be in the past." });
+    }
+
+    setErrors(foundErrors);
+    if (foundErrors.length > 0) return false;
+    return true;
+  }
+
+
   return (
     <form>
+      {displayErrors()}
       <label htmlFor="first-name">First Name</label>
       <input
         name="first_name"

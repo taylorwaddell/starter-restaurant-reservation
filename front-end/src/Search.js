@@ -7,6 +7,7 @@ function Search() {
   const [reservations, setReservations] = useState();
   const [searchNumber, setSearchNumber] = useState();
   const history = useHistory();
+  setReservations(null);
 
   function handleChange({ target }) {
     setSearchNumber(target.value);
