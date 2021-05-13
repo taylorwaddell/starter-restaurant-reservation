@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "./layout/ErrorAlert";
 
 function NewTable() {
   const history = useHistory();
+  const [error, setError] = useState([]);
   const [formData, setFormData] = useState({
     table_name: "",
     capacity: 0,
@@ -13,10 +15,26 @@ function NewTable() {
   function handleSubmit(e) {
     e.preventDefault();
     // insert API submit sauce here
-    history.push(`/dashboard`);
+    if (validateFields()) {
+      history.push(`/dashboard`);
+    }
+  }
+  function validateFields() {
+    let foundError = null;
+
+    if (formData.table_name === "" || formData.capacity === "") {
+      foundError = { message: "Please fill out all fields." };
+    } else if (formData.table_name.length < 2) {
+      foundError = { message: "Table name must be at least 2 characters." };
+    }
+
+    setError(foundError);
+
+    return foundError.length !== null;
   }
   return (
     <form>
+      <ErrorAlert error={error} />
       <label htmlFor="table-name">Table Name</label>
       <input
         name="table_name"
@@ -31,6 +49,7 @@ function NewTable() {
         name="capacity"
         id="capacity"
         type="number"
+        min="1"
         onChange={handleChange}
         value={formData.capacity}
         required

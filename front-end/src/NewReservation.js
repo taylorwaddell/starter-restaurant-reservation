@@ -15,8 +15,7 @@ function NewReservation() {
   const [errors, setErrors] = useState([]);
   const displayErrors = () => {
     return errors.map((error, idx) => <ErrorAlert key={idx} error={error} />);
-  }
-
+  };
 
   function handleChange({ target }) {
     setFormData({ ...formData, [target.name]: target.value });
@@ -24,35 +23,89 @@ function NewReservation() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // insert API submit sauce here
-    if (valiDate()) {
-      history.push(
-        `/dashboard?date=${formData.reservation_date}`
-      );
-    }
-  }
-  function valiDate() {
-    const reserveDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00.000`);
-    const todaysDate = new Date();
     const foundErrors = [];
-    
-    console.log(reserveDate.getDay());
-    if (reserveDate.getDay() === 1) {
+    // insert API submit sauce here
+    if (valiDate(foundErrors) && validateFields(foundErrors)) {
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    }
+    setErrors(foundErrors);
+  }
+  function valiDate(foundErrors) {
+    const reserveDate = new Date(
+      `${formData.reservation_date}T${formData.reservation_time}:00.000`
+    );
+    const todaysDate = new Date();
+
+
+    console.log(`${formData.reservation_date}T${formData.reservation_time}:00.000`);
+    console.log(reserveDate, todaysDate);
+
+    if (reserveDate.getDay() === 2) {
       foundErrors.push({
         message:
-          "Reservations cannot be made on a Tuesday (Restaurant is closed).",
+          "Reservation cannot be made: Restaurant is closed on Tuesdays.",
       });
     }
 
     if (reserveDate < todaysDate) {
-      foundErrors.push({ message: "Reservation time cannot be in the past." });
+      foundErrors.push({
+        message: "Reservation cannot be made: Date is in the past.",
+      });
     }
 
-    setErrors(foundErrors);
-    if (foundErrors.length > 0) return false;
+    if (
+      reserveDate.getHours() < 10 ||
+      (reserveDate.getHours() === 10 && reserveDate.getMinutes() < 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Restaurant is not open until 10:30AM.",
+      });
+    }
+
+    else if (
+      reserveDate.getHours() > 22 ||
+      (reserveDate.getHours() === 22 && reserveDate.getMinutes() >= 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Restaurant is closed after 10:30PM.",
+      });
+    }
+
+    else if (
+      reserveDate.getHours() > 21 ||
+      (reserveDate.getHours() === 21 && reserveDate.getMinutes() > 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).",
+      });
+    }
+
+    
+
+    if (foundErrors.length > 0) {
+      return false;
+    }
     return true;
   }
-
+  function validateFields(foundErrors) {
+    for(const field in formData) {
+      if(formData[field] === "") {
+        foundErrors.push({ message: `${field.split("_").join(" ")} cannot be left blank.`})
+      }
+    }
+  
+    if(formData.people <= 0) {
+      foundErrors.push({ message: "Party must be a size of at least 1." })
+    }
+  
+    if(foundErrors.length > 0) {
+      return false;
+    }
+    return true;
+  }
 
   return (
     <form>
