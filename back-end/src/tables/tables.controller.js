@@ -16,7 +16,6 @@ async function checkId(req, res, next) {
 
 async function checkNewTable(req, res, next) {
   if (!req.body.data) return next({ status: 400, message: "Data Missing!" });
-  console.log("req.body val", req.body);
 
   const { table_name, capacity, reservation_id } = req.body.data;
 
@@ -85,9 +84,7 @@ async function read(req, res) {
 }
 
 async function create(req, res) {
-  console.log("pre-await", res.locals.newTable);
   const createdTable = await service.create(res.locals.newTable);
-  console.log("post-await", createdTable);
   res.status(201).json({ data: createdTable[0] }); 
 }
 
