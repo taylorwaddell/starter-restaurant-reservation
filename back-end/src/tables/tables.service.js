@@ -9,7 +9,7 @@ function read(table_id) {
 }
 
 function create(newTable) {
-  knex("tables").insert(newTable).returning("*");
+  return knex("tables").insert(newTable).returning("*");
 }
 
 function update(table_id, reservation_id) {
