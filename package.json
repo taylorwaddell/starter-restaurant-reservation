@@ -49,6 +49,8 @@
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED",
   "dependencies": {
-    "knex": "^0.95.6"
+    "axios": "^0.21.1",
+    "knex": "^0.95.6",
+    "reactjs-popup": "^2.0.4"
   }
 }
