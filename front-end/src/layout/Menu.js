@@ -2,6 +2,11 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+import dash from "./imgs/dash.svg";
+import search from "./imgs/search.svg";
+import newRes from "./imgs/newRes.svg";
+import addTable from "./imgs/addTable.svg";
+
 /**
  * Defines the menu for this application.
  *
@@ -24,26 +29,22 @@ function Menu() {
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
-              <span className="oi oi-dashboard" />
-              &nbsp;Dashboard
+              <img src={dash} alt="dashboard" /> Dashboard
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
-              <span className="oi oi-magnifying-glass" />
-              &nbsp;Search
+            <img src={search} alt="search" /> Search
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
-              <span className="oi oi-plus" />
-              &nbsp;New Reservation
+            <img src={newRes} alt="new reservation" /> New Reservation
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/tables/new">
-              <span className="oi oi-layers" />
-              &nbsp;New Table
+            <img src={addTable} alt="add table" /> Add Table
             </Link>
           </li>
         </ul>

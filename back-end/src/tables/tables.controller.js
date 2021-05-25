@@ -42,7 +42,7 @@ async function checkUpdate(req, res, next) {
   if (!reservation_id)
     return next({ status: 400, message: "Missing reservation_id" });
 
-  const reservation = await reservationService.read(reservation_id);
+  const reservation = await resService.read(reservation_id);
   if (!reservation)
     return next({ status: 404, message: `${reservation_id} does not exist` });
 
