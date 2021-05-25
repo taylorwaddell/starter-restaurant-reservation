@@ -3,6 +3,7 @@ import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "./Reservation";
 import { listTables, updateTable, readReservation } from "../utils/api";
+import customStyle from "../customStyle";
 
 export default function Seating() {
   const [formData, setFormData] = useState("Select a table.");
@@ -68,6 +69,7 @@ export default function Seating() {
               name="table_id"
               onChange={handleChange}
               value={formData}
+              className="bg-secondary text-white p-1 border rounded border-secondary"
             >
               <option>Select a table.</option>
               {tables.map((table) => {
@@ -79,16 +81,17 @@ export default function Seating() {
               })}
             </select>
           </label>
-          <button type="submit" className="btn btn-sm btn-primary">
+          <button type="submit" className="btn btn-sm" style={customStyle.bg}>
             Submit
           </button>
-        </form>
         <button
           onClick={handleCancel}
-          className="mb-5 mt-2 btn btn-sm btn-danger"
+          className="mb-5 mt-2 btn btn-sm"
+          style={customStyle.bgBad}
         >
           Cancel
         </button>
+        </form>
         {reservation.reservation_time && (
           <Reservation reservation={reservation} type="seating" />
         )}

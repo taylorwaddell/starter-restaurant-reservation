@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import customStyle from "../customStyle";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
 
@@ -42,7 +43,7 @@ export default function Tables() {
               <label htmlFor="first_name" className="text-white form-label">
                 Table name:
                 <input
-                  className="form-control"
+                  className="form-control bg-dark border-dark text-white"
                   id="table_name"
                   type="text"
                   name="table_name"
@@ -56,7 +57,7 @@ export default function Tables() {
               <label htmlFor="people" className="text-white form-label">
                 Capacity:
                 <input
-                  className="form-control"
+                  className="form-control bg-dark border-dark text-white"
                   id="capacity"
                   type="number"
                   min="1"
@@ -69,17 +70,19 @@ export default function Tables() {
               </label>
             </div>
             <div className="form-group">
-              <button className="btn btn-sm btn-info" type="submit">
+              <button className="btn btn-sm" style={customStyle.bg} type="submit">
                 Submit
               </button>
               <button
-                className="mx-3 btn btn-sm btn-danger"
+                className="mx-3 btn btn-sm"
+                style={customStyle.bgBad}
                 onClick={() => history.goBack()}
               >
                 Cancel
               </button>
               <button
-                className="btn btn-sm btn-warning"
+                className="btn btn-sm"
+                style={customStyle.bgYell}
                 onClick={() => setFormData(initialState)}
               >
                 Reset

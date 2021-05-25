@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import customStyle from "../customStyle";
 import ErrorAlert from "../layout/ErrorAlert";
 import {
   createReservation,
@@ -79,7 +80,7 @@ function ReservationForm({ type }) {
           <label htmlFor="first_name" className="form-label text-white">
             First name:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="first_name"
               type="text"
               name="first_name"
@@ -93,7 +94,7 @@ function ReservationForm({ type }) {
           <label htmlFor="last_name" className="form-label text-white">
             Last name:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="last_name"
               type="text"
               name="last_name"
@@ -107,7 +108,7 @@ function ReservationForm({ type }) {
           <label htmlFor="mobile_number" className="form-label text-white">
             Phone number:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="mobile_number"
               type="tel"
               pattern="(1?)\(?([0-9]{3})?\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})"
@@ -122,7 +123,7 @@ function ReservationForm({ type }) {
           <label htmlFor="reservation_date" className="form-label text-white">
             Date:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="reservation_date"
               type="date"
               placeholder="YYYY-MM-DD"
@@ -138,7 +139,7 @@ function ReservationForm({ type }) {
           <label htmlFor="reservation_time" className="form-label text-white">
             Time:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="reservation_time"
               type="time"
               placeholder="HH:MM"
@@ -154,7 +155,7 @@ function ReservationForm({ type }) {
           <label htmlFor="people" className="form-label text-white">
             Number of guests:
             <input
-              className="form-control"
+              className="form-control bg-dark border-dark text-white"
               id="people"
               type="number"
               min="1"
@@ -167,11 +168,11 @@ function ReservationForm({ type }) {
           </label>
         </div>
         <div className="form-group">
-          <button type="submit" className="btn btn-sm btn-info">Submit</button>
-          <button className="mx-3 btn btn-sm btn-danger" onClick={() => history.goBack()}>
+          <button type="submit" className="btn btn-sm" style={customStyle.bg}>Submit</button>
+          <button className="mx-3 btn btn-sm" style={customStyle.bgBad} onClick={() => history.goBack()}>
             Cancel
           </button>
-          <button className="btn btn-sm btn-warning" onClick={() => setFormData(initialState)}>Reset</button>
+          <button className="btn btn-sm" style={customStyle.bgYell} onClick={() => setFormData(initialState)}>Reset</button>
         </div>
       </form>
       <ErrorAlert error={reservationsError} />

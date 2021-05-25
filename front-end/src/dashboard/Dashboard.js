@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { today, next, previous, formatDate } from "../utils/date-time";
 import Reservation from "./Reservation";
 import Tables from "./Tables";
+import customStyle from "../customStyle";
 
 function Dashboard() {
   function useQuery() {
@@ -37,7 +38,7 @@ function Dashboard() {
     <main className="text-center bg-dark">
       <h1 className="m-3 text-white">{formatDate(date)}</h1>
       <button onClick={() => setDate(previous(date))} className="btn btn-sm btn-secondary">Previous Day</button>
-      <button className="mx-3 btn btn-sm btn-primary" onClick={() => setDate(today())}>
+      <button className="mx-3 btn btn-sm" style={customStyle.bg} onClick={() => setDate(today())}>
         Today
       </button>
       <button onClick={() => setDate(next(date))} className="btn btn-sm btn-secondary">Next Day</button>
@@ -56,9 +57,9 @@ function Dashboard() {
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       {reservations.length ? (
-        <h3 className="text-primary">Reservations</h3>
+        <h3 className="text-white">Reservations</h3>
       ) : (
-        <h3 className="text-primary">{`No reservations for ${date}`}</h3>
+        <h3 className="text-white">{`No reservations for ${date}`}</h3>
       )}
       <div className="d-flex justify-content-center flex-wrap mb-4">
         {reservations.map((reservation) => (
@@ -68,7 +69,7 @@ function Dashboard() {
           />
         ))}
       </div>
-      <h3 className="text-warning mt-4">Available Tables </h3>
+      <h3 className="text-white mt-4">Available Tables </h3>
       <div className="d-flex justify-content-center mb-4 flex-wrap">
         {tables.map((table) => (
           <Tables key={table.table_id} table={table} />

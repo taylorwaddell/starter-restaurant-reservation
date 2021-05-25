@@ -2,6 +2,8 @@ import { useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "./Reservation";
+import customStyle from "../customStyle";
+import searchCon from "./resCons/searchCon.svg";
 
 export default function Search() {
   const [mobile_number, setMobileNumber] = useState("");
@@ -44,7 +46,7 @@ export default function Search() {
               name="mobile_number"
               placeholder="Enter phone number."
               onChange={handleChange}
-              className="form-control"
+              className="form-control bg-secondary border-secondary text-white"
               aria-describedby="find-button"
               required
             />
@@ -52,9 +54,10 @@ export default function Search() {
               <button
                 type="submit"
                 id="find-button"
-                className="btn btn-primary mb-5"
+                className="btn mb-5"
+                style={customStyle.bg}
               >
-                <span className="oi oi-magnifying-glass" />
+                <img src={searchCon} alt="search" />
               </button>
             </div>
           </div>
