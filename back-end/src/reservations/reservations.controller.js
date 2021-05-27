@@ -1,7 +1,13 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-async function checkId(req, res, next) {
+
+// --------------------------- Validation Middleware
+
+/**
+ * Ensures reservation exists
+ */
+async function checkReservationId(req, res, next) {
   const { reservation_id } = req.params;
   const data = await service.read(reservation_id);
   if (!data)
@@ -15,6 +21,10 @@ async function checkId(req, res, next) {
   }
 }
 
+/**
+ * Validates reservation input data.
+ * Ensures data is correctly formatted.
+ */
 async function checkProps(req, res, next) {
   if (!req.body.data) return next({ status: 400, message: "Inputs missing" });
   const {
@@ -37,7 +47,7 @@ async function checkProps(req, res, next) {
     return next({
       status: 400,
       message:
-        "first_name, last_name, mobile_number, reservation_date, reservation_time, people fields must be completed",
+        "first_name, last_name, mobile_number, reservation_date, reservation_time, and people fields must be completed",
     });
   }
   if (!reservation_date.match(/\d{4}-\d{2}-\d{2}/)) {
@@ -70,6 +80,9 @@ async function checkProps(req, res, next) {
   next();
 }
 
+/**
+ * Ensures requested reservation date is in the future and not a Tuesday
+ */
 async function isValidDate(req, res, next) {
   const { reservation_date } = req.body.data;
   let today = new Date();
@@ -89,6 +102,9 @@ async function isValidDate(req, res, next) {
   next();
 }
 
+/**
+ * Ensures reservation time falls between 10:30-9:30
+ */
 async function isValidTime(req, res, next) {
   const time = res.locals.newReserve.reservation_time;
   let hour = time[0] + time[1];
@@ -105,6 +121,9 @@ async function isValidTime(req, res, next) {
   next();
 }
 
+/**
+ * Ensures reservation status is update-able
+ */
 async function validStatus(req, res, next) {
   const currentStatus = res.locals.reservation.status;
   const { status } = req.body.data;
@@ -127,6 +146,8 @@ async function validStatus(req, res, next) {
   }
   next();
 }
+
+// --------------------------- CRUD Functions
 
 async function list(req, res) {
   const { date, mobile_number } = req.query;
@@ -169,6 +190,9 @@ async function update(req, res) {
   res.json({ data: data[0] });
 }
 
+/**
+ * Mainly used by table.controller
+ */
 async function updateStatus(req, res) {
   const { reservation_id } = req.params;
   const status = req.body.data.status;
@@ -184,14 +208,14 @@ module.exports = {
     asyncErrorBoundary(isValidTime),
     asyncErrorBoundary(create),
   ],
-  read: [asyncErrorBoundary(checkId), asyncErrorBoundary(read)],
+  read: [asyncErrorBoundary(checkReservationId), asyncErrorBoundary(read)],
   updateStatus: [
-    asyncErrorBoundary(checkId),
+    asyncErrorBoundary(checkReservationId),
     asyncErrorBoundary(validStatus),
     asyncErrorBoundary(updateStatus),
   ],
   update: [
-    asyncErrorBoundary(checkId),
+    asyncErrorBoundary(checkReservationId),
     asyncErrorBoundary(checkProps),
     asyncErrorBoundary(update),
   ],

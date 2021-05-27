@@ -2,7 +2,11 @@ const service = require("./tables.service");
 const resService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-async function checkId(req, res, next) {
+// --------------------------- Validation Middleware
+/**
+ * Ensures Table Exists
+ */
+async function checkTableId(req, res, next) {
   const { table_id } = req.params;
   const data = await service.read(table_id);
 
@@ -14,29 +18,39 @@ async function checkId(req, res, next) {
   }
 }
 
+/**
+ * Validates table info and checks/sets table status
+ */
 async function checkNewTable(req, res, next) {
-  if (!req.body.data) return next({ status: 400, message: "Data Missing!" });
+  if (!req.body.data) {
+    return next({ status: 400, message: "Table info required." });
+  }
 
   const { table_name, capacity, reservation_id } = req.body.data;
 
-  if (!table_name || table_name === "" || table_name.length === 1)
+  if (!table_name || table_name === "" || table_name.length === 1) {
     return next({ status: 400, message: "Invalid table_name" });
+  }
 
-  if (!capacity || capacity === 0 || typeof capacity !== "number")
+  if (!capacity || capacity === 0 || typeof capacity !== "number") {
     return next({ status: 400, message: "Invalid capacity" });
+  }
 
   res.locals.newTable = { table_name, capacity };
 
   if (reservation_id) {
     res.locals.newTable.reservation_id = reservation_id;
-    res.locals.newTable.occupied = true;
+    res.locals.newTable.status = "occupied";
   }
 
   next();
 }
 
+/**
+ * Validates reservation for seating
+ */
 async function checkUpdate(req, res, next) {
-  if (!req.body.data) return next({ status: 400, message: "Data Missing!" });
+  if (!req.body.data) return next({ status: 400, message: "Data Required" });
 
   const { reservation_id } = req.body.data;
   if (!reservation_id)
@@ -53,6 +67,9 @@ async function checkUpdate(req, res, next) {
   next();
 }
 
+/**
+ * Ensures table can accomodate party size
+ */
 async function checkCapacity(req, res, next) {
   const { table_id } = req.params;
   const table = await service.read(table_id);
@@ -64,7 +81,7 @@ async function checkCapacity(req, res, next) {
       message: `${table.table_name} does not have the capacity to seat ${reservation.people} people.`,
     });
 
-  if (table.occupied)
+  if (table.status == "occupied")
     return next({
       status: 400,
       message: `${table.table_name} is currently occupied.`,
@@ -73,6 +90,7 @@ async function checkCapacity(req, res, next) {
   next();
 }
 
+// --------------------------- CRUD functions
 async function list(req, res) {
   const tables = await service.list();
   res.json({ data: tables });
@@ -85,7 +103,7 @@ async function read(req, res) {
 
 async function create(req, res) {
   const createdTable = await service.create(res.locals.newTable);
-  res.status(201).json({ data: createdTable[0] }); 
+  res.status(201).json({ data: createdTable[0] });
 }
 
 async function update(req, res) {
@@ -98,8 +116,8 @@ async function update(req, res) {
 
 async function destroy(req, res, next) {
   const { table_id } = req.params;
-  const { occupied, table_name, reservation_id } = await service.read(table_id);
-  if (!occupied)
+  const { status, table_name, reservation_id } = await service.read(table_id);
+  if (status == "free")
     return next({ status: 400, message: `${table_name} not occupied.` });
   const removedTable = await service.destroy(table_id);
   await resService.updateStatus(reservation_id, "finished");
@@ -108,12 +126,12 @@ async function destroy(req, res, next) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  read: [asyncErrorBoundary(checkId), asyncErrorBoundary(read)],
+  read: [asyncErrorBoundary(checkTableId), asyncErrorBoundary(read)],
   create: [asyncErrorBoundary(checkNewTable), asyncErrorBoundary(create)],
   update: [
     asyncErrorBoundary(checkUpdate),
     asyncErrorBoundary(checkCapacity),
     asyncErrorBoundary(update),
   ],
-  destroy: [asyncErrorBoundary(checkId), asyncErrorBoundary(destroy)],
+  destroy: [asyncErrorBoundary(checkTableId), asyncErrorBoundary(destroy)],
 };
