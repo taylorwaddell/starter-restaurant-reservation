@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
 import { updateStatus } from "../utils/api";
-import { formatDate, formatTime, formatPhone } from "../utils/date-time";
-import groupCon from "./resCons/groupCon.svg";
+import { formatDate, formatTime } from "../utils/date-time";
+import groupCon from "./imgs/groupCon.svg";
 import customStyle from "../customStyle";
 
-export default function Reservation({ reservation, type }) {
+export default function ReservationCard({ reservation, type }) {
   const date = formatDate(reservation.reservation_date);
   const time = formatTime(reservation.reservation_time);
-  const phone = formatPhone(reservation.mobile_number);
-
 
   const handleCancel = async () => {
     if (
@@ -46,7 +44,7 @@ export default function Reservation({ reservation, type }) {
             <h6>{time}</h6>
           </div>
           <div className="d-flex justify-content-between mb-4 text-dark">
-            <h6>{phone}</h6>
+            <h6>{reservation.mobile_number}</h6>
 
             <h5 data-reservation-id-status={reservation.reservation_id}>
               {reservation.status}

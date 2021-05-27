@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import Reservation from "./Reservation";
+import Reservation from "./ReservationCard";
 import customStyle from "../customStyle";
-import searchCon from "./resCons/searchCon.svg";
+import searchCon from "./imgs/searchCon.svg";
 
 export default function Search() {
   const [mobile_number, setMobileNumber] = useState("");
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  const reservationsContent = reservations.map((reservation, index) => {
+  const reservationCards = reservations.map((reservation, index) => {
     return <Reservation reservation={reservation} key={index} />;
   });
 
@@ -24,7 +24,7 @@ export default function Search() {
     listReservations({ mobile_number }, abortController.signal)
       .then(setReservations)
       .then(() =>
-        reservationsContent.length === 0
+        reservationCards.length === 0
           ? setReservationsError({ message: "No reservations found" })
           : setReservationsError(null)
       )
@@ -45,6 +45,7 @@ export default function Search() {
             <input
               name="mobile_number"
               placeholder="Enter phone number."
+              type="tel"
               onChange={handleChange}
               className="form-control bg-secondary border-secondary text-white"
               aria-describedby="find-button"
@@ -62,18 +63,18 @@ export default function Search() {
             </div>
           </div>
         </form>
-        {reservationsContent.length !== 0 ? (
+        {reservationCards.length !== 0 ? (
           <h3 className="text-white">Reservations</h3>
         ) : (
           ""
         )}
-        {reservationsContent.length === 0 ? (
+        {reservationCards.length === 0 ? (
           <ErrorAlert error={reservationsError} />
         ) : (
           ""
         )}
         <div className="d-flex justify-content-center flex-wrap mb-5">
-          {reservationsContent}
+          {reservationCards}
         </div>
       </div>
     </>

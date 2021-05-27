@@ -3,8 +3,8 @@ import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useLocation } from "react-router-dom";
 import { today, next, previous, formatDate } from "../utils/date-time";
-import Reservation from "./Reservation";
-import Tables from "./Tables";
+import ReservationCard from "./ReservationCard";
+import TablesCard from "./TablesCard";
 import customStyle from "../customStyle";
 
 function Dashboard() {
@@ -63,7 +63,7 @@ function Dashboard() {
       )}
       <div className="d-flex justify-content-center flex-wrap mb-4">
         {reservations.map((reservation) => (
-          <Reservation
+          <ReservationCard
             key={reservation.reservation_id}
             reservation={reservation}
           />
@@ -72,7 +72,7 @@ function Dashboard() {
       <h3 className="text-white mt-4">Available Tables </h3>
       <div className="d-flex justify-content-center mb-4 flex-wrap">
         {tables.map((table) => (
-          <Tables key={table.table_id} table={table} />
+          <TablesCard key={table.table_id} table={table} />
         ))}
       </div>
     </main>

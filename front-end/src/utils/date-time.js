@@ -115,14 +115,3 @@ export const formatTime = (time) => {
   }
   return `${hour}:${minutes} ${meridiem}`;
 };
-
-export const formatPhone = (number) => {
-  const cleaned = ("" + number).replace(/\D/g, "");
-  const match = cleaned.match(/^(1|)?(\d{3})?(\d{3})(\d{4})$/);
-  if (match) {
-    const intlCode = match[1] ? "+1 " : "";
-    const areaCode = match[2] ? `(${match[2]})` : "";
-    return [intlCode, areaCode, match[3], "-", match[4]].join("");
-  }
-  return number;
-};

@@ -24,7 +24,6 @@ export default function Tables() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("form", formData);
       await createTable({ data: formData });
       setFormData({ ...initialState });
       history.push(`/dashboard`);

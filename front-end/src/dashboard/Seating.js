@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import Reservation from "./Reservation";
+import ReservationCard from "./ReservationCard";
 import { listTables, updateTable, readReservation } from "../utils/api";
 import customStyle from "../customStyle";
 
@@ -93,7 +93,7 @@ export default function Seating() {
         </button>
         </form>
         {reservation.reservation_time && (
-          <Reservation reservation={reservation} type="seating" />
+          <ReservationCard reservation={reservation} type="seating" />
         )}
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={reservationError} />

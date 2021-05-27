@@ -18,7 +18,7 @@ function Menu() {
               style={{
                 fill: "rgba(108, 117, 125, 1)",
                 transform: "",
-                "-ms-filter": "",
+                msFilter: "",
               }}
             >
               <g className="fa-group">
@@ -48,7 +48,7 @@ function Menu() {
               style={{
                 fill: "rgba(108, 117, 125, 1)",
                 transform: "",
-                "-ms-filter": "",
+                msFilter: "",
               }}
             >
               <g className="fa-group">
@@ -88,7 +88,7 @@ function Menu() {
               style={{
                 fill: "rgba(108, 117, 125, 1)",
                 transform: "",
-                "-ms-filter": "",
+                msFilter: "",
               }}
             >
               <g className="fa-group">
@@ -118,7 +118,7 @@ function Menu() {
               style={{
                 fill: "rgba(108, 117, 125, 1)",
                 transform: "",
-                "-ms-filter": "",
+                msFilter: "",
               }}
             >
               <g className="fa-group">
